@@ -39,4 +39,5 @@ public class MyServlet implements Servlet {
     public void destroy() {
         logger.info("Delete MyServlet");
     }
+
 }
