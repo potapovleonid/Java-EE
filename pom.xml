@@ -17,6 +17,7 @@
 
     <modules>
         <module>l1web-app</module>
+        <module>javaEE-JSF-CDI</module>
     </modules>
 
 </project>
