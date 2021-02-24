@@ -39,8 +39,16 @@ public class ProductRepository {
             Long id = this.id.incrementAndGet();
             product.setId(id);
         }
-
         products.put(product.getId(), product);
+    }
+
+    public Product saveOrUpdateAndReturn(Product product){
+        if (product.getId() == null){
+            Long id = this.id.incrementAndGet();
+            product.setId(id);
+        }
+        products.put(product.getId(), product);
+        return product;
     }
 
     public void deleteById(Long id){

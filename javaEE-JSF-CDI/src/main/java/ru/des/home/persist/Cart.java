@@ -13,10 +13,15 @@ public class Cart {
 
     public void addProductToCart(Product product){
         if (product.getId() == null) {
-            repository.saveOrUpdate(product);
+            product = repository.saveOrUpdateAndReturn(product);
         }
         products.put(product.getId(), product);
+    }
 
+    public void deleteProductFromCart(Product product) throws Exception {
+        if (!products.remove(product.getId(), product)){
+            throw new Exception("There is no such product in the cart");
+        }
     }
 
 }
