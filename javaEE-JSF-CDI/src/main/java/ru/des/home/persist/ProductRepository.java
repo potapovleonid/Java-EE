@@ -1,8 +1,16 @@
 package ru.des.home.persist;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Named;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.transaction.Transactional;
+import javax.transaction.UserTransaction;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,45 +22,71 @@ import java.util.concurrent.atomic.AtomicLong;
 @ApplicationScoped
 public class ProductRepository {
 
-    private final Map<Long, Product> products = new ConcurrentHashMap<>();
+    private static final Logger logger = LoggerFactory.getLogger(ProductRepository.class);
 
-    private final AtomicLong id = new AtomicLong(0);
+    @PersistenceContext(unitName = "ds")
+    private EntityManager em;
+
+    @Resource
+    private UserTransaction ut;
 
     @PostConstruct
-    public void init(){
-        this.saveOrUpdate(new Product(null, "Product  1", "Butter", new BigDecimal(700)));
-        this.saveOrUpdate(new Product(null, "Product  2", "Meat", new BigDecimal(1500)));
-        this.saveOrUpdate(new Product(null, "Product  3", "Bread", new BigDecimal(100)));
-        this.saveOrUpdate(new Product(null, "Product  4", "Apple", new BigDecimal(50)));
-    }
+    public void init() throws Exception {
+        if (countAll() == 0) {
+            try {
+                ut.begin();
 
-    public List<Product> findAll(){
-        return new ArrayList<>(products.values());
-    }
+                saveOrUpdate(new Product(null, "Product  1",
+                        "Description of product 1", new BigDecimal(100), null));
+                saveOrUpdate(new Product(null, "Product  2",
+                        "Description of product 2", new BigDecimal(200), null));
+                saveOrUpdate(new Product(null, "Product  3",
+                        "Description of product 3", new BigDecimal(200), null));
 
-    public Product findById(Long id){
-        return products.get(id);
-    }
-
-    public void saveOrUpdate(Product product){
-        if (product.getId() == null){
-            Long id = this.id.incrementAndGet();
-            product.setId(id);
+                ut.commit();
+            } catch (Exception ex) {
+                logger.error("", ex);
+                ut.rollback();
+            }
         }
-        products.put(product.getId(), product);
     }
 
-    public Product saveOrUpdateAndReturn(Product product){
-        if (product.getId() == null){
-            Long id = this.id.incrementAndGet();
-            product.setId(id);
+    public List<Product> findAll() {
+        return em.createNamedQuery("findAll", Product.class)
+                .getResultList();
+    }
+
+    public Product findById(Long id) {
+        return em.find(Product.class, id);
+    }
+
+    public Long countAll() {
+        return em.createNamedQuery("countAll", Long.class)
+                .getSingleResult();
+    }
+
+    @Transactional
+    public void saveOrUpdate(Product product) {
+        if (product.getId() == null) {
+            em.persist(product);
         }
-        products.put(product.getId(), product);
+        em.merge(product);
+    }
+
+    @Transactional
+    public Product saveOrUpdateAndReturn(Product product) {
+        if (product.getId() == null) {
+            em.persist(product);
+        }
+        em.merge(product);
         return product;
     }
 
-    public void deleteById(Long id){
-        products.remove(id);
+    @Transactional
+    public void deleteById(Long id) {
+        em.createNamedQuery("deleteById")
+                .setParameter("id", id)
+                .executeUpdate();
     }
 
 }

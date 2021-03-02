@@ -1,0 +1,46 @@
+package ru.des.home.persist;
+
+import javax.persistence.*;
+import java.util.List;
+
+@Entity
+@Table(name = "order_tbl")
+@NamedQueries({
+        @NamedQuery(name = "findAll", query = "from Order"),
+        @NamedQuery(name = "countAll", query = "select count(*) from Order "),
+        @NamedQuery(name = "deleteById", query = "delete from Order p where p.id = :id")
+})
+public class Order {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "order_id")
+    private Long id;
+
+    @OneToMany(mappedBy = "order")
+    private List<Product> products;
+
+    public Order() {
+    }
+
+    public Order(Long id, List<Product> products) {
+        this.id = id;
+        this.products = products;
+    }
+
+    public List<Product> getProducts() {
+        return products;
+    }
+
+    public void setProducts(List<Product> products) {
+        this.products = products;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+}
