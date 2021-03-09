@@ -3,6 +3,7 @@ package ru.des.home.controllers;
 import ru.des.home.persist.Cart;
 import ru.des.home.persist.Product;
 
+import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
 import java.io.Serializable;
@@ -15,9 +16,12 @@ import java.util.Map;
 @SessionScoped
 public class CartController implements Serializable {
 
-    private Map<Long, Product> productMap = new HashMap<>();
+    @EJB
+    private CartService cartService;
 
-    private Cart cart;
+
+    // TODO
+    private Map<Long, Product> productMap = new HashMap<>();
 
     public List<Product> getProductToCart(){
         return new ArrayList<>(productMap.values());

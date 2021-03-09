@@ -1,6 +1,7 @@
 package ru.des.home.persist;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "category_tbl")
@@ -19,9 +20,8 @@ public class Category {
     @Column(name = "title_fld")
     private String title;
 
-    @ManyToOne
-    @JoinColumn(name = "product_id", nullable = false)
-    private Product product;
+    @OneToMany(mappedBy = "category")
+    private List<Product> products;
 
     public Category() {
     }
@@ -31,12 +31,16 @@ public class Category {
         this.title = title;
     }
 
-    public Product getProduct() {
-        return product;
+    public Category(String title) {
+        this.title = title;
     }
 
-    public void setProduct(Product product) {
-        this.product = product;
+    public List<Product> getProducts() {
+        return products;
+    }
+
+    public void setProducts(List<Product> products) {
+        this.products = products;
     }
 
     public Long getId() {
