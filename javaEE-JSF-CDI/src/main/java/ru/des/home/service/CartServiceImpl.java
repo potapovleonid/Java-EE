@@ -13,4 +13,9 @@ public class CartServiceImpl implements CartService{
     public void addToCart(ProductRepr product) {
 
     }
+
+    @Override
+    public void deleteProductFromCart(ProductRepr productRepr) {
+
+    }
 }
