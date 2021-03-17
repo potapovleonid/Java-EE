@@ -4,20 +4,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.PostConstruct;
-import javax.annotation.Resource;
 import javax.ejb.Stateless;
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Named;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.transaction.Transactional;
-import javax.transaction.UserTransaction;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicLong;
 
 @Stateless
 public class ProductRepository {
@@ -80,5 +71,16 @@ public class ProductRepository {
                 .setParameter("id", id)
                 .executeUpdate();
     }
+
+    public Product findByTitle(String title) {
+        return em.createNamedQuery("findByTitle", Product.class).getSingleResult();
+    }
+
+    public List findProductByCategoryId(Long id) {
+        return em.createNamedQuery("findProductByCategoryId")
+                .setParameter("id", id)
+                .getResultList();
+    }
+
 
 }
