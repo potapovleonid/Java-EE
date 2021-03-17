@@ -1,0 +1,45 @@
+<html lang="en"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:pp="http://primefaces.org/ui">
+
+<h:head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"/>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"/>
+    <title>EShop application</title>
+</h:head>
+
+<h:body>
+    <ui:include src="WEB-INF/fragments/navigation.xhtml">
+        <ui:param name="pageName" value="login"/>
+    </ui:include>
+
+    <div class="container">
+        <h1>Test page for login</h1>
+        <form method="POST" action="j_security_check">
+            <div class="form-group">
+                <label>Username</label>
+                <h:outputLabel value="password" for="j_password"></h:outputLabel>
+                <h:inputText styleClass="form-control" id="j_username"
+                             name="j_username"
+                             placeholder="Enter description"/>
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <h:outputLabel value="password" for="j_password"></h:outputLabel>
+                <h:inputText styleClass="form-control" id="j_password"
+                             name="j_password"
+                             placeholder="Enter description"/>
+            </div>
+        </form>
+    </div>
+</h:body>
+
+</html>

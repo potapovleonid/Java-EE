@@ -7,6 +7,7 @@ import ru.des.home.persist.CategoryRepository;
 import ru.des.home.persist.Product;
 import ru.des.home.persist.ProductRepository;
 
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import java.util.List;
@@ -24,6 +25,7 @@ public class ProductServiceImpl implements ProductService{
     private CategoryRepository categoryRepository;
 
     @Override
+    @RolesAllowed({"USER", "ADMIN"})
     public List<ProductRepr> findAll() {
         return productRepository.findAll().stream()
                 .map(ProductRepr::new)
@@ -31,6 +33,7 @@ public class ProductServiceImpl implements ProductService{
     }
 
     @Override
+    @RolesAllowed({"USER", "ADMIN"})
     public ProductRepr findById(Long id) {
         Product product = productRepository.findById(id);
         if(product != null){
@@ -40,11 +43,13 @@ public class ProductServiceImpl implements ProductService{
     }
 
     @Override
+    @RolesAllowed("ADMIN")
     public Long countAll() {
         return productRepository.countAll();
     }
 
     @Override
+    @RolesAllowed("ADMIN")
     public void saveOrUpdate(ProductRepr product) {
         logger.info("Saving product with id {}" , product.getId());
 
@@ -57,17 +62,20 @@ public class ProductServiceImpl implements ProductService{
     }
 
     @Override
+    @RolesAllowed("ADMIN")
     public void deleteById(Long id) {
         productRepository.deleteById(id);
     }
 
     @Override
+    @RolesAllowed({"USER", "ADMIN"})
     public Product findByTitle(String title) {
         return productRepository.findByTitle(title);
     }
 
     @Override
-    public List findAllByCategoryId(Long id) {
+    @RolesAllowed({"USER", "ADMIN"})
+    public List<Product> findAllByCategoryId(Long id) {
         return productRepository.findProductByCategoryId(id);
     }
 }

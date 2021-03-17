@@ -2,6 +2,7 @@ package ru.des.home.controllers;
 
 import ru.des.home.persist.Cart;
 import ru.des.home.persist.Product;
+import ru.des.home.service.CartService;
 
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
@@ -28,6 +29,7 @@ public class CartController implements Serializable {
     }
 
     public String addToCart(Product product) {
+        Cart cart = new Cart();
         if (product == null) {
             throw new IllegalArgumentException("add product to cart is null");
         }
@@ -41,6 +43,7 @@ public class CartController implements Serializable {
     }
 
     public String removeFromCart(Product product) throws Exception {
+        Cart cart = new Cart();
         if (product.getId() == null){
             throw new IllegalArgumentException("remove product from cart ID is null");
         }
