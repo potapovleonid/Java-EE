@@ -1,5 +1,7 @@
 package ru.des.home.persist;
 
+import ru.des.home.service.ProductRepr;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.List;
@@ -30,26 +32,30 @@ public class Product {
     @JoinColumn(name = "order_id", nullable = false)
     private Order order;
 
-    @OneToMany(mappedBy = "product")
-    private List<Category> categories;
+    @ManyToOne
+    private Category category;
 
     public Product() {
     }
 
-    public Product(Long id, String title, String description, BigDecimal price, List<Category> categories) {
+    public Product(Long id, String title, String description, BigDecimal price) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.price = price;
-        this.categories = categories;
     }
 
-    public List<Category> getCategories() {
-        return categories;
+    public Product(ProductRepr productRepr, Category category) {
+        this(productRepr.getId(), productRepr.getTitle(), productRepr.getDescription(), productRepr.getPrice());
+        this.category = category;
     }
 
-    public void setCategories(List<Category> categories) {
-        this.categories = categories;
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
     }
 
     public Order getOrder() {
