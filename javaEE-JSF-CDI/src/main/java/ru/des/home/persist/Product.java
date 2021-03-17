@@ -11,7 +11,9 @@ import java.util.List;
 @NamedQueries({
         @NamedQuery(name = "findAll", query = "from Product"),
         @NamedQuery(name = "countAll", query = "select count(*) from Product"),
-        @NamedQuery(name = "deleteById", query = "delete from Product p where p.id = :id")
+        @NamedQuery(name = "deleteById", query = "delete from Product p where p.id = :id"),
+        @NamedQuery(name = "findByTitle", query = "select p from Product p where p.title = :title"),
+        @NamedQuery(name = "findProductByCategoryId", query = "from Product p where p.category.id = :id")
 })
 public class Product {
 
